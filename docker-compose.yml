@@ -24,13 +24,13 @@ services:
       EDC_PARTICIPANT_ID: ${EDC_PARTICIPANT_ID:-my_participant_id}
 
       # OAuth and IAM Configuration
-      EDC_OAUTH_TOKEN_URL: ${DAPS_URL:-http://daps:4567}/token
+      EDC_OAUTH_TOKEN_URL: ${DAPS_URL}/token
       EDC_OAUTH_CLIENT_ID: ${EDC_OAUTH_CLIENT_ID:-my_client_id}
       EDC_OAUTH_PRIVATE_KEY_ALIAS: "daps-private-key"
       EDC_OAUTH_CERTIFICATE_ALIAS: "daps-public-key"
-      EDC_OAUTH_PROVIDER_JWKS_URL: ${DAPS_URL:-http://daps:4567}/certs
+      EDC_OAUTH_PROVIDER_JWKS_URL: ${DAPS_URL}/certs
       EDC_IAM_TOKEN_SCOPE: "idsc:IDS_CONNECTOR_ATTRIBUTES_ALL"
-      EDC_OAUTH_PROVIDER_AUDIENCE: ${DAPS_URL:-http://daps:4567}/token
+      EDC_OAUTH_PROVIDER_AUDIENCE: ${DAPS_URL}/token
       EDC_OAUTH_ENDPOINT_AUDIENCE: "idsc:IDS_CONNECTORS_ALL"
       EDC_AGENT_IDENTITY_KEY: "referringConnector"
 
