@@ -8,3 +8,14 @@ build/
 
 # Ignore vscode
 .vscode
+.DS_Store
+
+# Avoid accidental secrets tracking
+*.pem
+*.p12
+*.cert
+*.key
+letsencrypt
+
+# Environment variables
+.env
