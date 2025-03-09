@@ -16,7 +16,7 @@ import static org.testcontainers.containers.wait.strategy.Wait.forLogMessage;
 public class DockerImagesTest {
 
     @ParameterizedTest
-    @ValueSource(strings = { "connector-inmemory", "connector-vault" })
+    @ValueSource(strings = { "connector-inmemory", "connector-vault-postgresql" })
     void shouldStartAndStopTheRuntime(String runtimeName) {
         var tarCreated = gradlewDistTar(runtimeName);
 

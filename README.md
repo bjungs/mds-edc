@@ -17,7 +17,7 @@ Build docker image
 docker build --build-arg RUNTIME="connector-inmemory" launchers
 ```
 
-### Vault connector
+### Vault PostgreSQL connector
 ```
-docker build --build-arg RUNTIME="connector-vault" launchers
+docker build --build-arg RUNTIME="connector-vault-postgresql" launchers
 ```

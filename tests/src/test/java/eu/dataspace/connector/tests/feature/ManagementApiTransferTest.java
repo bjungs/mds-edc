@@ -3,6 +3,7 @@ package eu.dataspace.connector.tests.feature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import eu.dataspace.connector.tests.DapsExtension;
 import eu.dataspace.connector.tests.MdsParticipant;
+import eu.dataspace.connector.tests.PostgresqlExtension;
 import eu.dataspace.connector.tests.VaultExtension;
 import jakarta.json.Json;
 import jakarta.json.JsonArrayBuilder;
@@ -69,7 +70,7 @@ class ManagementApiTransferTest {
     }
 
     @Nested
-    class HashicorpVault extends Tests {
+    class HashicorpVaultPostgresql extends Tests {
 
         @RegisterExtension
         @Order(0)
@@ -77,28 +78,34 @@ class ManagementApiTransferTest {
 
         @RegisterExtension
         @Order(1)
+        private static final PostgresqlExtension POSTGRES_EXTENSION = new PostgresqlExtension(PROVIDER.getName(), CONSUMER.getName());
+
+        @RegisterExtension
+        @Order(2)
         private static final DapsExtension DAPS_EXTENSION = new DapsExtension();
 
         @RegisterExtension
         private static final RuntimeExtension PROVIDER_EXTENSION = new RuntimePerClassExtension(
-                new EmbeddedRuntime("provider", ":launchers:connector-vault")
+                new EmbeddedRuntime("provider", ":launchers:connector-vault-postgresql")
                         .configurationProvider(PROVIDER::getConfiguration)
                         .configurationProvider(() -> VAULT_EXTENSION.getConfig("provider"))
                         .registerSystemExtension(ServiceExtension.class, PROVIDER.seedVaultKeys())
                         .configurationProvider(() -> DAPS_EXTENSION.dapsConfig("provider"))
                         .registerSystemExtension(ServiceExtension.class, DAPS_EXTENSION.seedExtension())
+                        .configurationProvider(() -> POSTGRES_EXTENSION.getConfig(PROVIDER.getName()))
         );
 
         @RegisterExtension
         private static final RuntimeExtension CONSUMER_EXTENSION = new RuntimePerClassExtension(
-                new EmbeddedRuntime("consumer", ":launchers:connector-vault")
+                new EmbeddedRuntime("consumer", ":launchers:connector-vault-postgresql")
                         .configurationProvider(CONSUMER::getConfiguration)
                         .configurationProvider(() -> DAPS_EXTENSION.dapsConfig("consumer"))
                         .configurationProvider(() -> VAULT_EXTENSION.getConfig("consumer"))
                         .registerSystemExtension(ServiceExtension.class, DAPS_EXTENSION.seedExtension())
+                        .configurationProvider(() -> POSTGRES_EXTENSION.getConfig(PROVIDER.getName()))
         );
 
-        protected HashicorpVault() {
+        protected HashicorpVaultPostgresql() {
             super(PROVIDER_EXTENSION, CONSUMER_EXTENSION);
         }
     }
