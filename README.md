@@ -24,7 +24,6 @@ docker build --build-arg RUNTIME="connector-inmemory" launchers
 #### Vault PostgreSQL connector
 ### Vault PostgreSQL connector
 ```
-docker build --build-arg RUNTIME="connector-vault-postresql" launchers
 docker build --build-arg RUNTIME="connector-vault-postgresql" launchers
 ```
 
@@ -48,17 +47,17 @@ docker build --build-arg RUNTIME="connector-vault-postgresql" launchers
 
 The deployment architecture consists of the following components:
 
-1. Traefik: Acts as a reverse proxy and handles SSL/TLS termination. It routes incoming requests to the appropriate services and manages Let's Encrypt certificates for HTTPS.
+1. Nginx: Acts as a reverse proxy and handles SSL/TLS termination. It routes incoming requests to the appropriate services.
 
-2. MDS EDC: The core component of the MDS (Mobility Data Space) Connector. It handles data exchange, policy enforcement, and integration with other participants in the dataspace.
+2. Certbot: Manages SSL/TLS certificates using Let's Encrypt for HTTPS.
 
-3. PostgreSQL: Provides persistent storage for the EDC, storing configuration data, policies, and other necessary information.
+3. MDS EDC: The core component of the MDS (Mobility Data Space) Connector. It handles data exchange, policy enforcement, and integration with other participants in the dataspace.
 
-4. Vault: HashiCorp Vault is used for secure secret management. It stores sensitive information such as API keys, certificates, and passwords, which are then injected into the EDC service.
+4. PostgreSQL: Provides persistent storage for the EDC, storing configuration data, policies, and other necessary information.
 
-5. Vault-init: A helper service that initializes and configures the Vault with necessary secrets during deployment.
+5. Vault: HashiCorp Vault is used for secure secret management. It stores sensitive information such as API keys, certificates, and passwords, which are then injected into the EDC service.
 
-This architecture ensures a secure, scalable, and maintainable deployment of the MDS Connector. Traefik handles incoming traffic and SSL, the EDC processes data requests and enforces policies, PostgreSQL provides persistent storage, and Vault manages secrets securely.
+6. Vault-init: A helper service that initializes and configures the Vault with necessary secrets during deployment.
 
 ### Configuration
 
@@ -73,9 +72,9 @@ This architecture ensures a secure, scalable, and maintainable deployment of the
 
    ```
    # MDS EDC Configuration
-   EDC_HOSTNAME=your-domain.com
+   EDC_HOSTNAME=yourdomain.com
    EDC_PARTICIPANT_ID=your-participant-id
-   ACME_EMAIL=your@email.com
+   CERTBOT_EMAIL=your@email.com
 
    # DAPS (Dynamic Attribute Provisioning Service) Configuration
    DAPS_URL=https://daps.demo.mobility-dataspace.eu/realms/DAPS/protocol/openid-connect
@@ -89,10 +88,14 @@ This architecture ensures a secure, scalable, and maintainable deployment of the
 
    # Vault Configuration
    VAULT_TOKEN=your-vault-token
-   VAULT_HOSTNAME=vault.localhost
    ```
 
    Ensure you replace all placeholder values with your actual configuration details.
+
+4. Update the Nginx configuration files:
+   - Edit `init.nginx.conf` and `secure.nginx.conf` to match your domain and desired server configuration.
+   - In both files, replace `yourdomain.com` with your actual domain name.
+   - Adjust any other settings as needed for your specific deployment.
 
    To generate the P12_CONTENT for your .env file:
 
@@ -111,67 +114,80 @@ This architecture ensures a secure, scalable, and maintainable deployment of the
 
    Note: The P12_CONTENT is a required variable in your .env file. It contains the base64 encoded content of your p12 certificate file.
 
-4. (Optional) For testing with self-signed certificates, modify the `traefik` service in `docker-compose.yml`:
-   ```yaml
-   traefik:
-     # ... other configurations ...
-     command:
-       # ... other commands ...
-       - "--certificatesresolvers.myresolver.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory"
-   ```
-
-   This uses Let's Encrypt's staging server for testing. Remove this line for production use.
-
 ### Deployment Steps
 
-1. Ensure the `init-vault.sh` script is in the same directory as your `docker-compose.yml` file.
+1. Ensure the `init-vault.sh` and `init-letsencrypt.sh` scripts are in the same directory as your `docker-compose.yml` file.
 
-2. Make the script executable:
+2. Make the scripts executable:
    ```
-   chmod +x init-vault.sh
+   chmod +x init-vault.sh init-letsencrypt.sh
    ```
 
-3. Start the services:
+3. Update your `docker-compose.yml` file to use the initial Nginx configuration:
+   ```yaml
+   nginx:
+     ...
+     volumes:
+       - ./init.nginx.conf:/etc/nginx/nginx.conf
+   ```
+
+4. Initialize SSL certificates:
+   ```
+   ./init-letsencrypt.sh
+   ```
+   This script will start the Nginx service with the initial configuration and set up SSL certificates using Let's Encrypt. It will prompt you to confirm before replacing any existing certificates.
+
+5. After successfully obtaining the certificates, update your `docker-compose.yml` file to use the secure Nginx configuration:
+   ```yaml
+   nginx:
+     ...
+     volumes:
+       - ./secure.nginx.conf:/etc/nginx/nginx.conf
+   ```
+
+6. Start all services with the secure configuration:
    ```
    docker compose up -d
    ```
+   This will start all services, including the automated Vault initialization, and Nginx with SSL/TLS enabled.
 
-   This will start all services, including the automated Vault initialization.
-
-4. Verify that all services are running:
+7. Verify that all services are running:
    ```
    docker compose ps
    ```
 
-5. The services should now be running:
-    - EDC: https://your-domain.com
-    - Vault: https://vault.your-domain.com
-    - Traefik Dashboard: http://your-domain.com:8080 (if enabled)
-
 ### Usage
 
-- API: https://your-domain.com/api
-- Control: https://your-domain.com/control
-- Management: https://your-domain.com/management
-- Protocol: https://your-domain.com/protocol
-- Public: https://your-domain.com/public
-- Version: https://your-domain.com/version
+The EDC services are now available at the following URLs:
+
+- API: https://yourdomain.com/api
+- Control: https://yourdomain.com/control
+- Management: https://yourdomain.com/management
+- Protocol: https://yourdomain.com/protocol
+- Public: https://yourdomain.com/public
+- Version: https://yourdomain.com/version
+
+Replace `yourdomain.com` with the actual domain you've configured in your `.env` file.
 
 ### Security Notes
 
 - All external access is enforced over HTTPS using Let's Encrypt SSL certificates.
 - Secrets are securely stored in HashiCorp Vault and injected into the EDC service.
 - The EDC service uses PostgreSQL for persistent storage.
-- Traefik is configured to automatically handle SSL/TLS certificates.
+- Nginx is configured to handle SSL/TLS termination and reverse proxy to the EDC services.
 
 ### Troubleshooting
 
-- Check container logs: `docker-compose logs [service-name]`
+- Check container logs: `docker compose logs [service-name]`
 - Ensure all environment variables are correctly set in the `.env` file
 - Verify that your domain is pointing to the correct IP address
 - If you need to reinitialize the Vault or add more secrets, modify the `init-vault.sh` script and run:
   ```
   docker compose up -d --no-deps vault-init
+  ```
+- If you need to renew SSL certificates, you can re-run the `init-letsencrypt.sh` script:
+  ```
+  ./init-letsencrypt.sh
   ```
 
 For more detailed information on EDC configuration and usage, refer to the official Eclipse Dataspace Connector documentation.
