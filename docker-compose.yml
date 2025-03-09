@@ -1,28 +1,19 @@
 services:
-  traefik:
-    image: traefik:v2.10
-    command:
-      - "--api.insecure=false"
-      - "--providers.docker=true"
-      - "--providers.docker.exposedbydefault=false"
-      - "--entrypoints.web.address=:80"
-      - "--entrypoints.websecure.address=:443"
-      - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
-      - "--certificatesresolvers.myresolver.acme.email=${ACME_EMAIL:-your@email.com}"
-      - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
+  nginx:
+    image: nginx:latest
+    container_name: nginx_container
     ports:
       - "80:80"
       - "443:443"
     volumes:
-      - "/var/run/docker.sock:/var/run/docker.sock:ro"
-      - "./letsencrypt:/letsencrypt"
-    labels:
-      - "traefik.enable=true"
-    environment:
-      - HOSTNAME=${EDC_HOSTNAME:-localhost}
+      # - ./init.nginx.conf:/etc/nginx/nginx.conf
+      - ./secure.nginx.conf:/etc/nginx/nginx.conf
+      - ./certbot/conf:/etc/letsencrypt
+      - ./certbot/www:/var/www/certbot
+    depends_on:
+      - edc
 
   edc:
-    image: your-registry/edc-image:latest
     build:
       context: ./launchers
       dockerfile: Dockerfile
@@ -82,14 +73,6 @@ services:
         condition: service_completed_successfully
       postgres:
         condition: service_healthy
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.edc.rule=Host(`${EDC_HOSTNAME:-localhost}`)"
-      - "traefik.http.routers.edc.entrypoints=websecure"
-      - "traefik.http.routers.edc.tls.certresolver=myresolver"
-      - "traefik.http.services.edc.loadbalancer.server.port=8181"
-      - "traefik.http.middlewares.edc-stripprefix.stripprefix.prefixes=/api,/control,/management,/protocol,/version,/public"
-      - "traefik.http.routers.edc.middlewares=edc-stripprefix"
 
   vault:
     image: hashicorp/vault:1.18.4
@@ -109,12 +92,6 @@ services:
       retries: 5
     ports:
       - "8200:8200"
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.vault.rule=Host(`vault.${EDC_HOSTNAME:-localhost}`)"
-      - "traefik.http.routers.vault.entrypoints=websecure"
-      - "traefik.http.routers.vault.tls.certresolver=myresolver"
-      - "traefik.http.services.vault.loadbalancer.server.port=8200"
 
   postgres:
     image: postgres:16.4
@@ -148,6 +125,13 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+
+  certbot:
+    image: certbot/certbot
+    volumes:
+      - ./certbot/conf:/etc/letsencrypt
+      - ./certbot/www:/var/www/certbot
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
 
 volumes:
   vault-data:

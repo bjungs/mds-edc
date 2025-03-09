@@ -15,7 +15,7 @@ build/
 *.p12
 *.cert
 *.key
-letsencrypt
+certbot
 
 # Environment variables
 .env
