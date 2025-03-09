@@ -117,7 +117,7 @@ services:
       - "traefik.http.services.vault.loadbalancer.server.port=8200"
 
   postgres:
-    image: postgres:13
+    image: postgres:16.4
     environment:
       POSTGRES_DB: edc
       POSTGRES_USER: ${POSTGRES_USER:-edc}
