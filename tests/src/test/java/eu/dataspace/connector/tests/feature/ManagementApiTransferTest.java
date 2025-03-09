@@ -102,7 +102,7 @@ class ManagementApiTransferTest {
                         .configurationProvider(() -> DAPS_EXTENSION.dapsConfig("consumer"))
                         .configurationProvider(() -> VAULT_EXTENSION.getConfig("consumer"))
                         .registerSystemExtension(ServiceExtension.class, DAPS_EXTENSION.seedExtension())
-                        .configurationProvider(() -> POSTGRES_EXTENSION.getConfig(PROVIDER.getName()))
+                        .configurationProvider(() -> POSTGRES_EXTENSION.getConfig(CONSUMER.getName()))
         );
 
         protected HashicorpVaultPostgresql() {
