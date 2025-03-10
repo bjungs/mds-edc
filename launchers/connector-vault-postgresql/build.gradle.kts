@@ -16,9 +16,9 @@ dependencies {
     runtimeOnly(libs.edc.dataplane.feature.sql.bom)
 
     // Tractusx EDC migrations libraries
-    implementation(libs.tractusx.edc.postgresql.migration)
-    implementation(libs.tractusx.edc.data.plane.migration)
-    implementation(libs.tractusx.edc.control.plane.migration)
+    runtimeOnly(libs.tractusx.edc.postgresql.migration)
+    runtimeOnly(libs.tractusx.edc.data.plane.migration)
+    runtimeOnly(libs.tractusx.edc.control.plane.migration)
 }
 
 application {
