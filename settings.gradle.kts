@@ -15,5 +15,5 @@ dependencyResolutionManagement {
 }
 
 include(":launchers:connector-inmemory")
-include(":launchers:connector-vault")
+include(":launchers:connector-vault-postgresql")
 include(":tests")

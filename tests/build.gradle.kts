@@ -8,8 +8,10 @@ dependencies {
     testImplementation(libs.junit.jupiter)
     testImplementation(libs.mockserver.netty)
     testImplementation(libs.rest.assured)
+    testImplementation(libs.postgres)
     testImplementation(libs.testcontainers.vault)
+    testImplementation(libs.testcontainers.postgresql)
 
     testCompileOnly(project(":launchers:connector-inmemory"))
-    testCompileOnly(project(":launchers:connector-vault"))
+    testCompileOnly(project(":launchers:connector-vault-postgresql"))
 }
