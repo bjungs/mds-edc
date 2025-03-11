@@ -9,3 +9,13 @@ build/
 # Ignore vscode
 .vscode
 .DS_Store
+
+# Avoid accidental secrets tracking
+*.pem
+*.p12
+*.cert
+*.key
+certbot
+
+# Environment variables
+.env

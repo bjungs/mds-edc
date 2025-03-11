@@ -1,51 +1,138 @@
 services:
+  nginx:
+    image: nginx:latest
+    container_name: nginx_container
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      # - ./deploy-local/init.nginx.conf:/etc/nginx/nginx.conf
+      - ./deploy-local/secure.nginx.conf:/etc/nginx/nginx.conf
+      - ./certbot/conf:/etc/letsencrypt
+      - ./certbot/www:/var/www/certbot
+    depends_on:
+      - edc
+
   edc:
     build:
       context: ./launchers
       dockerfile: Dockerfile
       args:
-        RUNTIME: connector-vault
+        RUNTIME: connector-vault-postgresql
     environment:
-      EDC_HOSTNAME: "localhost"
-      EDC_PARTICIPANT_ID: "my_participant_id"
-      
+      # Participant Configuration
+      EDC_PARTICIPANT_ID: ${EDC_PARTICIPANT_ID:-my_participant_id}
+
+      # OAuth and IAM Configuration
+      EDC_OAUTH_TOKEN_URL: ${DAPS_URL}/token
+      EDC_OAUTH_CLIENT_ID: ${EDC_OAUTH_CLIENT_ID:-my_client_id}
+      EDC_OAUTH_PRIVATE_KEY_ALIAS: "daps-private-key"
+      EDC_OAUTH_CERTIFICATE_ALIAS: "daps-public-key"
+      EDC_OAUTH_PROVIDER_JWKS_URL: ${DAPS_URL}/certs
+      EDC_IAM_TOKEN_SCOPE: "idsc:IDS_CONNECTOR_ATTRIBUTES_ALL"
+      EDC_OAUTH_PROVIDER_AUDIENCE: ${DAPS_URL}/token
+      EDC_OAUTH_ENDPOINT_AUDIENCE: "idsc:IDS_CONNECTORS_ALL"
+      EDC_AGENT_IDENTITY_KEY: "referringConnector"
+
+      # Vault Configuration
+      EDC_VAULT_HASHICORP_URL: "http://vault:8200"
+      EDC_VAULT_HASHICORP_TOKEN: ${VAULT_TOKEN:-root}
+
+      # Database Configuration
+      EDC_DATASOURCE_DEFAULT_URL: "jdbc:postgresql://postgres:5432/edc?currentSchema=mds_edc_schema"
+      EDC_DATASOURCE_DEFAULT_USER: ${POSTGRES_USER:-user}
+      EDC_DATASOURCE_DEFAULT_PASSWORD: ${POSTGRES_PASSWORD:-password}
+      ORG_ECLIPSE_TRACTUSX_EDC_POSTGRESQL_MIGRATION_SCHEMA: "mds_edc_schema"
+
+      # Web Server Configuration
       WEB_HTTP_PATH: "/api"
-      WEB_HTTP_PORT: "11001"
+      WEB_HTTP_PORT: "8181"
       WEB_HTTP_CONTROL_PATH: "/control"
-      WEB_HTTP_CONTROL_PORT: "11002"
+      WEB_HTTP_CONTROL_PORT: "9999"
       WEB_HTTP_MANAGEMENT_PATH: "/management"
-      WEB_HTTP_MANAGEMENT_PORT: "11003"
+      WEB_HTTP_MANAGEMENT_PORT: "8182"
       WEB_HTTP_PROTOCOL_PATH: "/protocol"
-      WEB_HTTP_PROTOCOL_PORT: "11004"
-      WEB_HTTP_PUBLIC_PATH: "/public"
-      WEB_HTTP_PUBLIC_PORT: "11005"
+      WEB_HTTP_PROTOCOL_PORT: "8183"
       WEB_HTTP_VERSION_PATH: "/version"
-      WEB_HTTP_VERSION_PORT: "11006"
+      WEB_HTTP_VERSION_PORT: "8184"
+      WEB_HTTP_PUBLIC_PATH: "/public"
+      WEB_HTTP_PUBLIC_PORT: "8185"
 
-      EDC_TRANSFER_PROXY_TOKEN_VERIFIER_PUBLICKEY_ALIAS: "public-key"
-      EDC_TRANSFER_PROXY_TOKEN_SIGNER_PRIVATEKEY_ALIAS: "private-key"
-
-      EDC_VAULT_HASHICORP_URL: "http://hashicorp_vault:8200"
-      EDC_VAULT_HASHICORP_TOKEN: "root"
-      EDC_VAULT_HASHICORP_FOLDER: "edc"
-
+      # Transfer Proxy Configuration
+      EDC_TRANSFER_PROXY_TOKEN_VERIFIER_PUBLICKEY_ALIAS: "transfer-proxy-token-signer-public-key"
+      EDC_TRANSFER_PROXY_TOKEN_SIGNER_PRIVATEKEY_ALIAS: "transfer-proxy-token-signer-private-key"
     ports:
-      - '11001:11001'
-      - '11002:11002'
-      - '11003:11003'
-      - '11004:11004'
-      - '11005:11005'
-      - '11006:11006'
-    
+      - "8181:8181"  # API
+      - "9999:9999"  # Control
+      - "8182:8182"  # Management
+      - "8183:8183"  # Protocol
+      - "8184:8184"  # Version
+      - "8185:8185"  # Public
     depends_on:
-      - hashicorp_vault
+      vault-init:
+        condition: service_completed_successfully
+      postgres:
+        condition: service_healthy
 
-  hashicorp_vault:
+  vault:
     image: hashicorp/vault:1.18.4
-    ports:
-      - "8200:8200"
-    environment:
-      VAULT_DEV_ROOT_TOKEN_ID: root
-      VAULT_DEV_LISTEN_ADDRESS: 0.0.0.0:8200
     cap_add:
       - IPC_LOCK
+    environment:
+      VAULT_DEV_ROOT_TOKEN_ID: ${VAULT_TOKEN:-root}
+      VAULT_DEV_LISTEN_ADDRESS: 0.0.0.0:8200
+      VAULT_ADDR: http://127.0.0.1:8200
+    volumes:
+      - vault-data:/vault/file
+    command: server -dev
+    healthcheck:
+      test: ["CMD", "vault", "status"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    ports:
+      - "8200:8200"
+
+  postgres:
+    image: postgres:17.4
+    environment:
+      POSTGRES_DB: edc
+      POSTGRES_USER: ${POSTGRES_USER:-edc}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-password}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-edc}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  vault-init:
+    image: hashicorp/vault:1.18.4
+    depends_on:
+      vault:
+        condition: service_healthy
+    environment:
+      VAULT_ADDR: http://vault:8200
+      VAULT_TOKEN: ${VAULT_TOKEN:-root}
+      P12_PASSWORD: ${P12_PASSWORD}
+      P12_CONTENT: ${P12_CONTENT}
+    volumes:
+      - ./deploy-local/init-vault.sh:/init-vault.sh
+    command: sh -c "apk add --no-cache bash && bash /init-vault.sh"
+    healthcheck:
+      test: ["CMD-SHELL", "vault status -tls-skip-verify | grep 'Initialized' | grep 'true'"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  certbot:
+    image: certbot/certbot
+    volumes:
+      - ./certbot/conf:/etc/letsencrypt
+      - ./certbot/www:/var/www/certbot
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+
+volumes:
+  vault-data:
+  postgres-data:
