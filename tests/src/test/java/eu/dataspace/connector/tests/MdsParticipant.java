@@ -113,7 +113,7 @@ public class MdsParticipant extends Participant implements BeforeAllCallback, Af
 
     public String createOffer(Map<String, Object> dataAddressProperties) {
         var assetId = UUID.randomUUID().toString();
-        createAsset(assetId, Map.of("http://w3id.org/mds#dataCategory", "any"), dataAddressProperties);
+        createAsset(assetId, Map.of("http://purl.org/dc/terms/title", "any"), dataAddressProperties);
         var noConstraintPolicyId = createPolicyDefinition(noConstraintPolicy());
         createContractDefinition(assetId, UUID.randomUUID().toString(), noConstraintPolicyId, noConstraintPolicyId);
         return assetId;
