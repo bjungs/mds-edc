@@ -3,6 +3,15 @@
 # Exit immediately if a command exits with a non-zero status
 set -e
 
+export VAULT_ADDR="http://127.0.01:8200"
+
+# Check if P12_FILE_PATH is set
+if [ -z "$P12_FILE_PATH" ]; then
+    echo "Error: P12_FILE_PATH environment variable is not set."
+    exit 1
+fi
+export P12_CONTENT=$(base64 -i $P12_FILE_PATH)
+
 # Check if VAULT_TOKEN is set
 if [ -z "$VAULT_TOKEN" ]; then
     echo "Error: VAULT_TOKEN environment variable is not set."

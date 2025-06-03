@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "d7cb7e4f-def1-4fcc-9011-36e42208a788",
+		"_postman_id": "2f557b99-7555-41d5-918a-dd8e13be4390",
 		"name": "MDS EDC Management API Collection",
 		"description": "A comprehensive collection of API requests for the MDS EDC Management API\n\nProvided under open source terms by Mobility Data Space GmbH.\n\nMaintained by Think-it GmbH - [https://think-it.io](https://think-it.io)",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
@@ -161,7 +161,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"@context\": {\n    \"@vocab\": \"https://w3id.org/edc/v0.0.1/ns/\"\n  },\n  \"@id\": \"definition-id\",\n  \"policy\": {\n    \"@context\": \"http://www.w3.org/ns/odrl.jsonld\",\n    \"@type\": \"Set\",\n    \"uid\": \"http://example.com/policy:1010\",\n    \"profile\": \"http://example.com/odrl:profile:02\",\n    \"permission\": [\n      {\n        \"target\": \"http://example.com/asset:9898.movie\",\n        \"action\": \"display\",\n        \"constraint\": [\n          {\n            \"leftOperand\": \"spatial\",\n            \"operator\": \"eq\",\n            \"rightOperand\": \"https://www.wikidata.org/wiki/Q183\",\n            \"comment\": \"i.e Germany\"\n          }\n        ]\n      }\n    ]\n  }\n}"
+							"raw": "{\n  \"@context\": {\n    \"@vocab\": \"https://w3id.org/edc/v0.0.1/ns/\"\n  },\n  \"@id\": \"definition-id\",\n  \"policy\": {\n    \"@context\":\"http://www.w3.org/ns/odrl.jsonld\",\n    \"@type\":\"Set\",\n    \"permission\":[{\n      \"action\":\"use\",\n      \"constraint\":[{\n        \"and\":[{\n          \"leftOperand\":\"REFERRING_CONNECTOR\",\n          \"operator\":\"odrl:eq\",\n          \"rightOperand\":\"MDSLXXX.XXXXX\"\n        },\n        {\n          \"leftOperand\":\"POLICY_EVALUATION_TIME\",\n          \"operator\":\"odrl:lt\",\n          \"rightOperand\":\"26/06/2025\"\n        }]\n      }]\n    }],\n    \"obligation\":[],\n    \"prohibition\":[]\n  }\n}"
 						},
 						"url": {
 							"raw": "{{provider_management_url}}/v3.1alpha/policydefinitions",
@@ -248,7 +248,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"@context\": {\n    \"@vocab\": \"https://w3id.org/edc/v0.0.1/ns/\"\n  },\n  \"@id\": \"definition-id\",\n  \"policy\": {\n    \"@context\": \"http://www.w3.org/ns/odrl.jsonld\",\n    \"@type\": \"Set\",\n    \"uid\": \"http://example.com/policy:1010\",\n    \"profile\": \"http://example.com/odrl:profile:02\",\n    \"permission\": [\n      {\n        \"target\": \"http://example.com/asset:9898.movie\",\n        \"action\": \"display\",\n        \"constraint\": [\n          {\n            \"leftOperand\": \"spatial\",\n            \"operator\": \"eq\",\n            \"rightOperand\": \"https://www.wikidata.org/wiki/Q183\",\n            \"comment\": \"i.e Germany\"\n          }\n        ]\n      }\n    ]\n  }\n}"
+							"raw": "{\n  \"@context\": {\n    \"@vocab\": \"https://w3id.org/edc/v0.0.1/ns/\"\n  },\n  \"@id\": \"definition-id\",\n  \"policy\": {\n    \"@context\":\"http://www.w3.org/ns/odrl.jsonld\",\n    \"@type\":\"Set\",\n    \"permission\":[{\n      \"action\":\"use\",\n      \"constraint\":[{\n        \"and\":[{\n          \"leftOperand\":\"REFERRING_CONNECTOR\",\n          \"operator\":\"odrl:eq\",\n          \"rightOperand\":\"MDSLXXX.XXXXX\"\n        },\n        {\n          \"leftOperand\":\"POLICY_EVALUATION_TIME\",\n          \"operator\":\"odrl:lt\",\n          \"rightOperand\":\"26/06/2025\"\n        }]\n      }]\n    }],\n    \"obligation\":[],\n    \"prohibition\":[]\n  }\n}"
 						},
 						"url": {
 							"raw": "{{provider_management_url}}/v3.1alpha/policydefinitions/{{id}}",
@@ -454,7 +454,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"@context\": {\n    \"@vocab\": \"https://w3id.org/edc/v0.0.1/ns/\"\n  },\n  \"@id\": \"definition-id\",\n  \"policy\": {\n    \"@context\": \"http://www.w3.org/ns/odrl.jsonld\",\n    \"@type\": \"Set\",\n    \"uid\": \"http://example.com/policy:1010\",\n    \"profile\": \"http://example.com/odrl:profile:02\",\n    \"permission\": [\n      {\n        \"target\": \"http://example.com/asset:9898.movie\",\n        \"action\": \"display\",\n        \"constraint\": [\n          {\n            \"leftOperand\": \"spatial\",\n            \"operator\": \"eq\",\n            \"rightOperand\": \"https://www.wikidata.org/wiki/Q183\",\n            \"comment\": \"i.e Germany\"\n          }\n        ]\n      }\n    ]\n  }\n}"
+							"raw": ""
 						},
 						"url": {
 							"raw": "{{consumer_management_url}}/v3/transferprocesses/{{id}}/deprovision",
@@ -487,7 +487,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"@context\": {\n    \"@vocab\": \"https://w3id.org/edc/v0.0.1/ns/\"\n  },\n  \"@id\": \"definition-id\",\n  \"policy\": {\n    \"@context\": \"http://www.w3.org/ns/odrl.jsonld\",\n    \"@type\": \"Set\",\n    \"uid\": \"http://example.com/policy:1010\",\n    \"profile\": \"http://example.com/odrl:profile:02\",\n    \"permission\": [\n      {\n        \"target\": \"http://example.com/asset:9898.movie\",\n        \"action\": \"display\",\n        \"constraint\": [\n          {\n            \"leftOperand\": \"spatial\",\n            \"operator\": \"eq\",\n            \"rightOperand\": \"https://www.wikidata.org/wiki/Q183\",\n            \"comment\": \"i.e Germany\"\n          }\n        ]\n      }\n    ]\n  }\n}"
+							"raw": ""
 						},
 						"url": {
 							"raw": "{{consumer_management_url}}/v3/transferprocesses/{{id}}/resume",
@@ -545,7 +545,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"@context\": {\n    \"@vocab\": \"https://w3id.org/edc/v0.0.1/ns/\"\n  },\n  \"@id\": \"definition-id\",\n  \"policy\": {\n    \"@context\": \"http://www.w3.org/ns/odrl.jsonld\",\n    \"@type\": \"Set\",\n    \"uid\": \"http://example.com/policy:1010\",\n    \"profile\": \"http://example.com/odrl:profile:02\",\n    \"permission\": [\n      {\n        \"target\": \"http://example.com/asset:9898.movie\",\n        \"action\": \"display\",\n        \"constraint\": [\n          {\n            \"leftOperand\": \"spatial\",\n            \"operator\": \"eq\",\n            \"rightOperand\": \"https://www.wikidata.org/wiki/Q183\",\n            \"comment\": \"i.e Germany\"\n          }\n        ]\n      }\n    ]\n  }\n}"
+							"raw": ""
 						},
 						"url": {
 							"raw": "{{consumer_management_url}}/v3/transferprocesses/{{id}}/suspend",
@@ -578,7 +578,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"@context\": {\n    \"@vocab\": \"https://w3id.org/edc/v0.0.1/ns/\"\n  },\n  \"@id\": \"definition-id\",\n  \"policy\": {\n    \"@context\": \"http://www.w3.org/ns/odrl.jsonld\",\n    \"@type\": \"Set\",\n    \"uid\": \"http://example.com/policy:1010\",\n    \"profile\": \"http://example.com/odrl:profile:02\",\n    \"permission\": [\n      {\n        \"target\": \"http://example.com/asset:9898.movie\",\n        \"action\": \"display\",\n        \"constraint\": [\n          {\n            \"leftOperand\": \"spatial\",\n            \"operator\": \"eq\",\n            \"rightOperand\": \"https://www.wikidata.org/wiki/Q183\",\n            \"comment\": \"i.e Germany\"\n          }\n        ]\n      }\n    ]\n  }\n}"
+							"raw": ""
 						},
 						"url": {
 							"raw": "{{consumer_management_url}}/v3/transferprocesses/{{id}}/terminate",
@@ -616,7 +616,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"@context\": {\n    \"@vocab\": \"https://w3id.org/edc/v0.0.1/ns/\"\n  },\n  \"@id\": \"definition-id\",\n  \"policy\": {\n    \"@context\": \"http://www.w3.org/ns/odrl.jsonld\",\n    \"@type\": \"Set\",\n    \"uid\": \"http://example.com/policy:1010\",\n    \"profile\": \"http://example.com/odrl:profile:02\",\n    \"permission\": [\n      {\n        \"target\": \"http://example.com/asset:9898.movie\",\n        \"action\": \"display\",\n        \"constraint\": [\n          {\n            \"leftOperand\": \"spatial\",\n            \"operator\": \"eq\",\n            \"rightOperand\": \"https://www.wikidata.org/wiki/Q183\",\n            \"comment\": \"i.e Germany\"\n          }\n        ]\n      }\n    ]\n  }\n}"
+							"raw": "{\n  \"@context\": {\n    \"@vocab\": \"https://w3id.org/edc/v0.0.1/ns/\"\n  },\n  \"@id\": \"definition-id\",\n  \"policy\": {\n    \"@context\":\"http://www.w3.org/ns/odrl.jsonld\",\n    \"@type\":\"Set\",\n    \"permission\":[{\n      \"action\":\"use\",\n      \"constraint\":[{\n        \"and\":[{\n          \"leftOperand\":\"REFERRING_CONNECTOR\",\n          \"operator\":\"odrl:eq\",\n          \"rightOperand\":\"MDSLXXX.XXXXX\"\n        },\n        {\n          \"leftOperand\":\"POLICY_EVALUATION_TIME\",\n          \"operator\":\"odrl:lt\",\n          \"rightOperand\":\"26/06/2025\"\n        }]\n      }]\n    }],\n    \"obligation\":[],\n    \"prohibition\":[]\n  }\n}"
 						},
 						"url": {
 							"raw": "{{provider_management_url}}/v3/policydefinitions",
@@ -703,7 +703,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"@context\": {\n    \"@vocab\": \"https://w3id.org/edc/v0.0.1/ns/\"\n  },\n  \"@id\": \"definition-id\",\n  \"policy\": {\n    \"@context\": \"http://www.w3.org/ns/odrl.jsonld\",\n    \"@type\": \"Set\",\n    \"uid\": \"http://example.com/policy:1010\",\n    \"profile\": \"http://example.com/odrl:profile:02\",\n    \"permission\": [\n      {\n        \"target\": \"http://example.com/asset:9898.movie\",\n        \"action\": \"display\",\n        \"constraint\": [\n          {\n            \"leftOperand\": \"spatial\",\n            \"operator\": \"eq\",\n            \"rightOperand\": \"https://www.wikidata.org/wiki/Q183\",\n            \"comment\": \"i.e Germany\"\n          }\n        ]\n      }\n    ]\n  }\n}"
+							"raw": "{\n  \"@context\": {\n    \"@vocab\": \"https://w3id.org/edc/v0.0.1/ns/\"\n  },\n  \"@id\": \"definition-id\",\n  \"policy\": {\n    \"@context\":\"http://www.w3.org/ns/odrl.jsonld\",\n    \"@type\":\"Set\",\n    \"permission\":[{\n      \"action\":\"use\",\n      \"constraint\":[{\n        \"and\":[{\n          \"leftOperand\":\"REFERRING_CONNECTOR\",\n          \"operator\":\"odrl:eq\",\n          \"rightOperand\":\"MDSLXXX.XXXXX\"\n        },\n        {\n          \"leftOperand\":\"POLICY_EVALUATION_TIME\",\n          \"operator\":\"odrl:lt\",\n          \"rightOperand\":\"26/06/2025\"\n        }]\n      }]\n    }],\n    \"obligation\":[],\n    \"prohibition\":[]\n  }\n}"
 						},
 						"url": {
 							"raw": "{{provider_management_url}}/v3/policydefinitions/{{id}}",
@@ -764,7 +764,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"@context\": {\n    \"@vocab\": \"https://w3id.org/edc/v0.0.1/ns/\"\n  },\n  \"@id\": \"asset-id\",\n  \"properties\": {\n    \"@context\": {\n        \"mds\": \"http://w3id.org/mds#\",\n        \"tmode\": \"http://w3id.org/mds/transport-mode#\"\n    },\n    \"mds:dataCategory\": \"cat:TrafficInformation\",\n    \"mds:dataSubcategory\": \"sub:Accidents\",\n    \"mds:transportMode\": \"tmode:Road\",\n    \"mds:geoReferenceMethod\": \"GPS\",\n    \"mds:dataModel\": \"GeoJSON\",\n    \"mds:dataFormatAdditionalDescription\": \"Traffic accident data in GeoJSON format\"\n  },\n  \"privateProperties\": {\n    \"privateKey\": \"privateValue\"\n  },\n  \"dataAddress\": {\n    \"type\": \"HttpData\",\n    \"baseUrl\": \"https://jsonplaceholder.typicode.com/todos\"\n  }\n}"
+							"raw": "{\n  \"@context\": {\n    \"@vocabulary\": \"https://w3id.org/edc/v0.0.1/ns/\",\n\n    \"dcat\": \"http://www.w3.org/ns/dcat#\",\n    \"dct\": \"http://purl.org/dc/terms/\",\n    \"owl\": \"http://www.w3.org/2002/07/owl#\",\n    \"mobilitydcatap\": \"https://w3id.org/mobilitydcat-ap/\",\n    \"mobilitydcatap-theme\": \"https://w3id.org/mobilitydcat-ap/mobility-theme/\", \n    \"adms\": \"http://www.w3.org/ns/adms#\",\n    \"edc\": \"https://w3id.org/edc/v0.0.1/ns/\",\n    \"skos\": \"http://www.w3.org/2004/02/skos/core#\",\n    \"rdf\": \"http://www.w3.org/2000/01/rdf-schema#\"\n  },\n  \"@id\": \"{{asset-id}}\",\n  \"properties\": {\n    \"dct:title\": \"My Asset\",\n    \"dct:description\": \"Lorem Ipsum ...\",\n    \"dct:language\": \"code/EN\",\n    \"dct:publisher\": \"https://data-source.my-org/about\",\n    \"dct:license\": \"https://data-source.my-org/license\",\n    \"dct:rightsHolder\": \"my-sovereign-legal-name\",\n    \"dct:accessRights\": \"usage policies and rights\",\n    \"dct:spatial\": {\n      \"skos:prefLabel\": \"my-geo-location\",\n      \"dct:identifier\": [\"DE\", \"DE636\"]\n    },\n    \"dct:isReferencedBy\": \"https://data-source.my-org/references\",\n    \"dct:temporal\": {\n      \"dcat:startDate\": \"2024-02-01\",\n      \"dcat:endDate\": \"2024-02-10\"\n    },\n    \"dct:accrualPeriodicity\": \"every month\",\n    \n    \"dcat:organization\": \"Company Name\",\n    \"dcat:keywords\": [\"some\", \"keywords\"],\n    \"dcat:mediaType\": \"application/json\",\n    \"dcat:landingPage\": \"https://data-source.my-org/docs\",\n    \n    \"owl:versionInfo\": \"1.1\",\n    \n    \"mobilitydcatap:mobilityTheme\": {\n      \"mobilitydcatap-theme:data-content-category\": \"Infrastructure and Logistics\",\n      \"mobilitydcatap-theme:data-content-sub-category\": \"General Information About Planning Of Routes\"\n    },\n    \"mobilitydcatap:mobilityDataStandard\": {\n      \"@id\": \"my-data-model-001\",\n      \"mobilitydcatap:schema\": {\n        \"dcat:downloadURL\": [\n          \"https://teamabc.departmentxyz.schema/a\",\n          \"https://teamabc.departmentxyz.schema/b\"\n        ],\n        \"rdf:Literal\": \"These reference files are important\"\n      }\n    },\n    \"mobilitydcatap:transportMode\": \"my-transport-mode\",\n    \"mobilitydcatap:georeferencingMethod\": \"my-geo-reference-method\",\n    \n    \"adms:sample\": [\"https://teamabc.departmentxyz.sample/a\", \"https://teamabc.departmentxyz.sample/b\"],\n    \n    \"additionalProperties\": {}\n  },\n  \"privateProperties\": {\n    \"privateKey\": \"privateValue\"\n  },\n  \"dataAddress\": {\n    \"type\": \"HttpData\",\n    \"baseUrl\": \"https://jsonplaceholder.typicode.com/todos\"\n  }\n}"
 						},
 						"url": {
 							"raw": "{{provider_management_url}}/v3/assets",
@@ -795,7 +795,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"@context\": {\n    \"@vocab\": \"https://w3id.org/edc/v0.0.1/ns/\"\n  },\n  \"@id\": \"asset-id\",\n  \"properties\": {\n    \"@context\": {\n        \"mds\": \"http://w3id.org/mds#\",\n        \"tmode\": \"http://w3id.org/mds/transport-mode#\"\n    },\n    \"mds:dataCategory\": \"cat:TrafficInformation\",\n    \"mds:dataSubcategory\": \"sub:Accidents\",\n    \"mds:transportMode\": \"tmode:Road\",\n    \"mds:geoReferenceMethod\": \"GPS\",\n    \"mds:dataModel\": \"GeoJSON\",\n    \"mds:dataFormatAdditionalDescription\": \"Traffic accident data in GeoJSON format\"\n  },\n  \"privateProperties\": {\n    \"privateKey\": \"privateValue\"\n  },\n  \"dataAddress\": {\n    \"type\": \"HttpData\",\n      \"name\": \"Example\",\n      \"baseUrl\": \"https://example.com/\"\n  }\n}"
+							"raw": "{\n  \"@context\": {\n    \"@vocab\": \"https://w3id.org/edc/v0.0.1/ns/\",\n\n    \"dcat\": \"http://www.w3.org/ns/dcat#\",\n    \"dct\": \"http://purl.org/dc/terms/\",\n    \"owl\": \"http://www.w3.org/2002/07/owl#\",\n    \"mobilitydcatap\": \"https://w3id.org/mobilitydcat-ap/\",\n    \"mobilitydcatap-theme\": \"https://w3id.org/mobilitydcat-ap/mobility-theme/\", \n    \"adms\": \"http://www.w3.org/ns/adms#\",\n    \"edc\": \"https://w3id.org/edc/v0.0.1/ns/\",\n    \"skos\": \"http://www.w3.org/2004/02/skos/core#\",\n    \"rdf\": \"http://www.w3.org/2000/01/rdf-schema#\"\n  },\n  \"@id\": \"asset-id\",\n  \"properties\": {\n    \"dct:title\": \"My Asset\",\n    \"dct:description\": \"Lorem Ipsum ...\",\n    \"dct:language\": \"code/EN\",\n    \"dct:publisher\": \"https://data-source.my-org/about\",\n    \"dct:license\": \"https://data-source.my-org/license\",\n    \"dct:rightsHolder\": \"my-sovereign-legal-name\",\n    \"dct:accessRights\": \"usage policies and rights\",\n    \"dct:spatial\": {\n      \"skos:prefLabel\": \"my-geo-location\",\n      \"dct:identifier\": [\"DE\", \"DE636\"]\n    },\n    \"dct:isReferencedBy\": \"https://data-source.my-org/references\",\n    \"dct:temporal\": {\n      \"dcat:startDate\": \"2024-02-01\",\n      \"dcat:endDate\": \"2024-02-10\"\n    },\n    \"dct:accrualPeriodicity\": \"every month\",\n    \n    \"dcat:organization\": \"Company Name\",\n    \"dcat:keywords\": [\"some\", \"keywords\"],\n    \"dcat:mediaType\": \"application/json\",\n    \"dcat:landingPage\": \"https://data-source.my-org/docs\",\n    \n    \"owl:versionInfo\": \"1.1\",\n    \n    \"mobilitydcatap:mobilityTheme\": {\n      \"mobilitydcatap-theme:data-content-category\": \"Infrastructure and Logistics\",\n      \"mobilitydcatap-theme:data-content-sub-category\": \"General Information About Planning Of Routes\"\n    },\n    \"mobilitydcatap:mobilityDataStandard\": {\n      \"@id\": \"my-data-model-001\",\n      \"mobilitydcatap:schema\": {\n        \"dcat:downloadURL\": [\n          \"https://teamabc.departmentxyz.schema/a\",\n          \"https://teamabc.departmentxyz.schema/b\"\n        ],\n        \"rdf:Literal\": \"These reference files are important\"\n      }\n    },\n    \"mobilitydcatap:transportMode\": \"my-transport-mode\",\n    \"mobilitydcatap:georeferencingMethod\": \"my-geo-reference-method\",\n    \n    \"adms:sample\": [\"https://teamabc.departmentxyz.sample/a\", \"https://teamabc.departmentxyz.sample/b\"],\n    \n    \"additionalProperties\": {}\n  },\n  \"privateProperties\": {\n    \"privateKey\": \"privateValue\"\n  },\n  \"dataAddress\": {\n    \"type\": \"HttpData\",\n      \"name\": \"Example\",\n      \"baseUrl\": \"https://example.com/\"\n  }\n}"
 						},
 						"url": {
 							"raw": "{{provider_management_url}}/v3/assets",
@@ -1083,7 +1083,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"@context\": {\n    \"@vocab\": \"https://w3id.org/edc/v0.0.1/ns/\"\n  },\n  \"@id\": \"definition-id\",\n  \"accessPolicyId\": \"asset-policy-id\",\n  \"contractPolicyId\": \"contract-policy-id\",\n  \"assetsSelector\": []\n}"
+							"raw": "{\n  \"@context\": {\n    \"@vocab\": \"https://w3id.org/edc/v0.0.1/ns/\"\n  },\n  \"@id\": \"{{definition-id}}\",\n  \"accessPolicyId\": \"{{asset-policy-id}}\",\n  \"contractPolicyId\": \"{{contract-policy-id}}\",\n  \"assetsSelector\": [],\n  \"privateProperties\": {\n    \"manualApproval\": \"{{false}}\"\n  }\n}"
 						},
 						"url": {
 							"raw": "{{provider_management_url}}/v3/contractdefinitions",
@@ -1114,7 +1114,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"@context\": {\n    \"@vocab\": \"https://w3id.org/edc/v0.0.1/ns/\"\n  },\n  \"@id\": \"new-offer-id\",\n  \"accessPolicyId\": \"always-true\",\n  \"contractPolicyId\": \"always-true\",\n  \"assetsSelector\": []\n}"
+							"raw": "{\n  \"@context\": {\n    \"@vocab\": \"https://w3id.org/edc/v0.0.1/ns/\"\n  },\n  \"@id\": \"{{new-offer-id}}\",\n  \"accessPolicyId\": \"always-true\",\n  \"contractPolicyId\": \"always-true\",\n  \"assetsSelector\": [],\n  \"privateProperties\": {\n    \"manualApproval\": \"{{false}}\"\n  }\n}"
 						},
 						"url": {
 							"raw": "{{provider_management_url}}/v3/contractdefinitions",
@@ -1344,7 +1344,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"@context\": {\n    \"@vocab\": \"https://w3id.org/edc/v0.0.1/ns/\"\n  },\n  \"@type\": \"https://w3id.org/edc/v0.0.1/ns/ContractRequest\",\n  \"counterPartyAddress\": \"https://edp-service-provider.dataspaces.think-it.io/api/dsp\",\n  \"protocol\": \"dataspace-protocol-http\",\n  \"policy\": {\n    \"@context\": \"http://www.w3.org/ns/odrl.jsonld\",\n    \"@type\": \"odrl:Offer\",\n    \"@id\": \"bmV3LW9mZmVyLWlk:ZGFzZWVuNQ==:OTJlOTE3NTgtYjQwNy00NzY4LTgxOTAtMjcyODhjOWIzYjBh\",\n    \"assigner\": \"MDSLFT8SYT.CJSBLO1\",\n    \"odrl:permission\": {\n        \"odrl:action\": {\n            \"@id\": \"use\"\n        }\n    },\n    \"odrl:prohibition\": [],\n    \"odrl:obligation\": [],\n    \"target\": \"daseen5\"\n  },\n  \"callbackAddresses\": [\n    {\n      \"transactional\": false,\n      \"uri\": \"https://webhook-test.com/fce8e470cf1bfd9bf734694f88113e2a\",\n      \"events\": [\n        \"contract.negotiation\"\n      ]\n    }\n  ]\n}"
+							"raw": "{\n  \"@context\": {\n    \"@vocab\": \"https://w3id.org/edc/v0.0.1/ns/\"\n  },\n  \"@type\": \"https://w3id.org/edc/v0.0.1/ns/ContractRequest\",\n  \"counterPartyAddress\": \"{{https://provider.dataspaces.think-it.io/api/dsp}}\",\n  \"protocol\": \"dataspace-protocol-http\",\n  \"policy\": {\n    \"@context\": \"http://www.w3.org/ns/odrl.jsonld\",\n    \"@type\": \"odrl:Offer\",\n    \"@id\": \"{{data-offer-from-catalog}}\",\n    \"assigner\": \"{{assigner-mds-id}}\",\n    \"odrl:permission\": {\n        \"odrl:action\": {\n            \"@id\": \"use\"\n        }\n    },\n    \"odrl:prohibition\": [],\n    \"odrl:obligation\": [],\n    \"target\": \"{{asset-id}}\"\n  }\n}"
 						},
 						"url": {
 							"raw": "{{consumer_management_url}}/v3/contractnegotiations",
@@ -1481,7 +1481,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"@context\": {\n    \"@vocab\": \"https://w3id.org/edc/v0.0.1/ns/\"\n  },\n  \"@type\": \"TerminateNegotiation\",\n  \"reason\": \"Termination reason\"\n}"
+							"raw": "{\n  \"@context\": {\n    \"@vocab\": \"https://w3id.org/edc/v0.0.1/ns/\"\n  },\n  \"@type\": \"TerminateNegotiation\",\n  \"reason\": \"{{Termination reason}}\"\n}"
 						},
 						"url": {
 							"raw": "{{consumer_management_url}}/v3/contractnegotiations/{{negotiationId}}/terminate",
@@ -1584,7 +1584,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"@context\": {\n    \"tx\": \"https://w3id.org/tractusx/v0.0.1/ns/\",\n    \"edc\": \"https://w3id.org/edc/v0.0.1/ns/\"\n  },\n  \"edc:agreementId\": \"contract-agreement-id\",\n  \"tx:reason\": \"This contract agreement was retired since the physical counterpart is no longer valid.\"\n}"
+							"raw": "{\n  \"@context\": {\n    \"@vocab\": \"https://w3id.org/edc/v0.0.1/ns/\",\n    \"tx\": \"https://w3id.org/tractusx/v0.0.1/ns/\"\n  },\n  \"agreementId\": \"{{contract-agreement-id}}\",\n  \"tx:reason\": \"{{This contract agreement was retired since the physical counterpart is no longer valid.}}\"\n}"
 						},
 						"url": {
 							"raw": "{{provider_management_url}}/v3.1alpha/retireagreements",
