@@ -7,7 +7,7 @@
 
 ### Architecture
 
-![Docker Compose Deployment Architecture](docs/images/docker_compose_deployment.png)
+![Docker Compose Deployment Architecture](../assets/docker_compose_deployment.png)
 
 The deployment architecture consists of the following components:
 
@@ -44,7 +44,7 @@ The deployment architecture consists of the following components:
    DAPS_URL=https://daps.demo.mobility-dataspace.eu/realms/DAPS/protocol/openid-connect
    EDC_OAUTH_CLIENT_ID=your-oauth-client-id
    P12_PASSWORD=your-p12-password
-   P12_CONTENT=your-p12-content-base64-encoded
+   P12_FILE_PATH=your-p12-file-path
 
    # Postgres Configuration
    POSTGRES_USER=edc
@@ -125,11 +125,9 @@ The deployment architecture consists of the following components:
 The EDC services are now available at the following URLs:
 
 - API: https://yourdomain.com/api
-- Control: https://yourdomain.com/control
-- Management: https://yourdomain.com/management
-- Protocol: https://yourdomain.com/protocol
+- Management: https://yourdomain.com/api/management
+- Protocol: https://yourdomain.com/api/dsp
 - Public: https://yourdomain.com/public
-- Version: https://yourdomain.com/version
 
 Replace `yourdomain.com` with the actual domain you've configured in your `.env` file.
 

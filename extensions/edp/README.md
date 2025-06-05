@@ -4,7 +4,7 @@ This documentation describes the EDP plugin, a EDC (Eclipse Dataspace Component)
 
 ## System Architecture Overview
 
-![System Architecture](../../docs/images/edp_extension_overview.png)
+![System Architecture](../../docs/assets/edp_extension_overview.png)
 
 The above diagram illustrates the overall system architecture showing how the Data Holder connects with EDPS and Daseen services through EDC contracts and data flows.
 

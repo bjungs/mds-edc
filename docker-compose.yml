@@ -48,23 +48,28 @@ services:
       # Web Server Configuration
       WEB_HTTP_PATH: "/api"
       WEB_HTTP_PORT: "8181"
-      WEB_HTTP_CONTROL_PATH: "/control"
-      WEB_HTTP_CONTROL_PORT: "9999"
-      WEB_HTTP_MANAGEMENT_PATH: "/management"
+      WEB_HTTP_CONTROL_PATH: "/api/control"
+      WEB_HTTP_CONTROL_PORT: "8186"
+      WEB_HTTP_MANAGEMENT_PATH: "/api/management"
       WEB_HTTP_MANAGEMENT_PORT: "8182"
-      WEB_HTTP_PROTOCOL_PATH: "/protocol"
+      WEB_HTTP_MANAGEMENT_AUTH_KEY: "x-api-key"
+
+      WEB_HTTP_PROTOCOL_PATH: "/api/dsp"
       WEB_HTTP_PROTOCOL_PORT: "8183"
-      WEB_HTTP_VERSION_PATH: "/version"
+      WEB_HTTP_VERSION_PATH: "/api/version"
       WEB_HTTP_VERSION_PORT: "8184"
       WEB_HTTP_PUBLIC_PATH: "/public"
       WEB_HTTP_PUBLIC_PORT: "8185"
+
+      EDC_DSP_CALLBACK_ADDRESS: "https://${EDC_HOSTNAME}/api/dsp"
+      EDC_DATAPLANE_API_PUBLIC_BASEURL: "https://${EDC_HOSTNAME}/public"
 
       # Transfer Proxy Configuration
       EDC_TRANSFER_PROXY_TOKEN_VERIFIER_PUBLICKEY_ALIAS: "transfer-proxy-token-signer-public-key"
       EDC_TRANSFER_PROXY_TOKEN_SIGNER_PRIVATEKEY_ALIAS: "transfer-proxy-token-signer-private-key"
     ports:
       - "8181:8181"  # API
-      - "9999:9999"  # Control
+      - "8186:8186"  # Control
       - "8182:8182"  # Management
       - "8183:8183"  # Protocol
       - "8184:8184"  # Version
