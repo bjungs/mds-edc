@@ -9,4 +9,4 @@ COPY ${RUNTIME}/build/distributions/connector-*.tar /app/
 
 RUN tar --strip-components=1 -xf connector-*.tar && rm connector-*.tar
 
-ENTRYPOINT /app/bin/${RUNTIME}
+ENTRYPOINT exec /app/bin/${RUNTIME}
