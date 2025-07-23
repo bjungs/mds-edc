@@ -14,7 +14,12 @@ services:
       - edc
 
   edc:
-    image: ghcr.io/mobility-data-space/mds-edc/connector-vault-postgresql:latest
+#    image: acrmegabits.azurecr.io/megabits-mds-edc
+    build:
+      context: ./launchers
+      dockerfile: Dockerfile
+      args:
+        RUNTIME: connector-vault-postgresql
     environment:
       # Participant Configuration
       EDC_PARTICIPANT_ID: ${EDC_PARTICIPANT_ID:-my_participant_id}
@@ -32,8 +37,10 @@ services:
       EDC_AGENT_IDENTITY_KEY: "referringConnector"
 
       # Vault Configuration
-      EDC_VAULT_HASHICORP_URL: "http://vault:8200"
-      EDC_VAULT_HASHICORP_TOKEN: ${VAULT_TOKEN:-root}
+      EDC_VAULT_NAME: ${EDC_VAULT_NAME}
+      AZURE_CLIENT_ID: ${AZURE_CLIENT_ID}
+      AZURE_TENANT_ID: ${AZURE_TENANT_ID}
+      AZURE_CLIENT_SECRET: ${AZURE_CLIENT_SECRET}
 
       # Database Configuration
       EDC_DATASOURCE_DEFAULT_URL: "jdbc:postgresql://postgres:5432/edc?currentSchema=mds_edc_schema"
@@ -61,6 +68,9 @@ services:
       EDC_DSP_CALLBACK_ADDRESS: "https://${EDC_HOSTNAME}/api/dsp"
       EDC_DATAPLANE_API_PUBLIC_BASEURL: "https://${EDC_HOSTNAME}/public"
 
+      # HTTP client
+      EDC_HTTP_CLIENT_HTTPS_ENFORCE: "true"
+
       # Transfer Proxy Configuration
       EDC_TRANSFER_PROXY_TOKEN_VERIFIER_PUBLICKEY_ALIAS: "transfer-proxy-token-signer-public-key"
       EDC_TRANSFER_PROXY_TOKEN_SIGNER_PRIVATEKEY_ALIAS: "transfer-proxy-token-signer-private-key"
@@ -80,29 +90,8 @@ services:
       - "8184:8184"  # Version
       - "8185:8185"  # Public
     depends_on:
-      vault-init:
-        condition: service_completed_successfully
       postgres:
         condition: service_healthy
-
-  vault:
-    image: hashicorp/vault:1.18.4
-    cap_add:
-      - IPC_LOCK
-    environment:
-      VAULT_DEV_ROOT_TOKEN_ID: ${VAULT_TOKEN:-root}
-      VAULT_DEV_LISTEN_ADDRESS: 0.0.0.0:8200
-      VAULT_ADDR: http://127.0.0.1:8200
-    volumes:
-      - vault-data:/vault/file
-    command: server -dev
-    healthcheck:
-      test: ["CMD", "vault", "status"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-    ports:
-      - "8200:8200"
 
   postgres:
     image: postgres:17.4
@@ -118,26 +107,6 @@ services:
       timeout: 5s
       retries: 5
 
-  vault-init:
-    image: hashicorp/vault:1.18.4
-    depends_on:
-      vault:
-        condition: service_healthy
-    environment:
-      VAULT_ADDR: http://vault:8200
-      VAULT_TOKEN: ${VAULT_TOKEN:-root}
-      P12_PASSWORD: ${P12_PASSWORD}
-      P12_FILE_PATH: /certificate.p12
-    volumes:
-      - ./resources/init-vault.sh:/init-vault.sh
-      - ${P12_FILE_PATH}:/certificate.p12
-    command: sh -c "apk add --no-cache bash && bash /init-vault.sh"
-    healthcheck:
-      test: ["CMD-SHELL", "vault status -tls-skip-verify | grep 'Initialized' | grep 'true'"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-
   certbot:
     image: certbot/certbot
     volumes:
@@ -146,5 +115,4 @@ services:
     entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
 
 volumes:
-  vault-data:
   postgres-data:

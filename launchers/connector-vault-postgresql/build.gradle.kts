@@ -12,7 +12,7 @@ dependencies {
 
     runtimeOnly(libs.edc.oauth2.daps)
     runtimeOnly(libs.edc.oauth2.service)
-    runtimeOnly(libs.edc.vault.hashicorp)
+    runtimeOnly(libs.edc.vault.azure)
 
     runtimeOnly(libs.edc.controlplane.feature.sql.bom)
     runtimeOnly(libs.edc.dataplane.feature.sql.bom)
